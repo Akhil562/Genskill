@@ -435,20 +435,27 @@
         // Skill name pools by type
         const skillPools = {
             basic: [
-                'Reading', 'Drawing', 'Cycling', 'Swimming', 'Cooking', 'Typing', 'Listening', 'Walking', 'Cleaning', 'Counting',
-                'Writing', 'Painting', 'Gardening', 'Climbing', 'Balancing', 'Knitting', 'Sewing', 'Origami', 'Sketching', 'Folding'
+                'Critical Thinking', 'Time Management', 'Effective Communication', 'Problem Solving', 'Basic Coding',
+                'Spreadsheet Skills', 'Email Etiquette', 'Note Taking', 'Goal Setting', 'Mind Mapping',
+                'Digital Organization', 'Online Research', 'Presentation Skills', 'Resume Writing', 'Networking Online',
+                'Personal Budgeting', 'Password Management', 'Cloud Storage Basics', 'Calendar Planning', 'Task Prioritization'
             ],
             fun: [
-                'Singing', 'Dancing', 'Running', 'Jumping', 'Storytelling', 'Baking', 'Fishing', 'Hiking', 'Juggling', 'Meditating',
-                'Stretching', 'Smiling', 'Organizing', 'Packing', 'Unpacking', 'Skipping', 'Jogging', 'Whistling', 'Shopping'
+                'Photo Editing', 'Making Memes', 'Podcasting Basics', 'Short Video Creation', 'Digital Drawing',
+                'Learning a New App', 'Making a Playlist', 'Basic Animation', 'DIY Desk Gadgets', 'Intro to Blogging',
+                'Creating a Digital Vision Board', 'Simple Coding Games', 'Building a Personal Website', 'GIF Creation', 'Online Quizzes',
+                'Virtual Escape Rooms', 'Learning Keyboard Shortcuts', 'Making a Digital Scrapbook', 'Voice Assistant Tricks'
             ],
             daily: [
-                'Cooking', 'Cleaning', 'Walking', 'Packing', 'Unpacking', 'Organizing', 'Shopping', 'Typing', 'Listening', 'Counting',
-                'Reading', 'Writing', 'Gardening', 'Folding', 'Drawing', 'Painting', 'Smiling'
+                'Online Banking Basics', 'Meal Planning with Apps', 'Digital Calendar Use', 'Smart Home Setup', 'Online Shopping Safety',
+                'Filling Online Forms', 'Using Maps & Navigation Apps', 'Setting Up Two-Factor Authentication', 'Managing Subscriptions', 'Online Bill Payments',
+                'Digital Decluttering', 'Organizing Digital Photos', 'Backing Up Data', 'Using Health Apps', 'Online Appointment Booking',
+                'Reading News Critically', 'Setting Up Email Filters', 'Managing Notifications', 'Using Password Managers'
             ],
             outdoor: [
-                'Cycling', 'Swimming', 'Hiking', 'Fishing', 'Running', 'Climbing', 'Jogging', 'Walking', 'Camping', 'Birdwatching',
-                'Gardening', 'Skating', 'Skipping', 'Balancing', 'Juggling', 'Nature Photography', 'Kite Flying', 'Orienteering', 'Rock Skipping', 'Trail Marking'
+                'Geocaching', 'Urban Gardening', 'Basic First Aid', 'Using Fitness Trackers', 'Planning a Safe Route',
+                'Outdoor Photography', 'Weather App Mastery', 'Identifying Local Plants', 'Setting Up a Tent', 'Reading QR Codes Outdoors',
+                'Using Public Transport Apps', 'Finding Free WiFi Safely', 'Outdoor Event Planning', 'Digital Birdwatching', 'Mapping a Walk with GPS'
             ],
             crush: [
                 'Playing Guitar', 'Dancing Smoothly', 'Telling Jokes', 'Cooking a Romantic Dinner', 'Writing Poetry', 'Singing a Song',
@@ -457,7 +464,6 @@
                 'Making a Playlist', 'Taking Good Photos', 'Planning a Surprise'
             ]
         };
-        // All skills combined (no duplicates)
         const skillNames = Array.from(new Set([...skillPools.basic, ...skillPools.fun, ...skillPools.daily]));
         const skillTypes = [
             'Basic Skill', 'Fun Skill', 'Daily Skill', 'Simple Skill', 'Useful Skill', 'Life Skill', 'Easy Skill', 'Quick Skill'
@@ -480,9 +486,9 @@
             } else {
                 pool = skillPools[selectedType] || skillNames;
             }
-            // Ask user if they want to add a new skill (except for 'all')
+            
             if (selectedType !== 'all') {
-                if (Math.random() < 0.25) { // 25% chance to prompt
+                if (Math.random() < 0.25) {
                     const newSkill = prompt('Add a new skill for this category (leave blank to skip):');
                     if (newSkill && newSkill.trim().length > 0) {
                         skillPools[selectedType].push(newSkill.trim());
@@ -497,7 +503,7 @@
             currentSkillTitle = title;
             const desc1 = skillTypes[Math.floor(Math.random() * skillTypes.length)];
             const desc2 = skillFacts[Math.floor(Math.random() * skillFacts.length)];
-            // Generate a random time to learn (less than 1 day)
+           
             const timeOptions = [
                 '10 minutes', '15 minutes', '20 minutes', '30 minutes', '45 minutes', '1 hour', '1.5 hours', '2 hours', '3 hours', '4 hours', '5 hours', '6 hours', '8 hours', '12 hours' 
             ];
@@ -507,7 +513,7 @@
             flipDesc2.textContent = desc2;
             flipTime.textContent = 'Time to learn: ' + time;
 
-            // Change background color of the card back depending on skill type
+            
             const cardBack = document.getElementById('flipCardBack');
             let cardColor = 'dodgerblue';
             let screenColor = null;
@@ -521,7 +527,7 @@
             }
             cardBack.style.backgroundColor = cardColor;
 
-            // Temporarily change the screen background color for 5 seconds
+           
             if (screenColor) {
                 const container = document.querySelector('.container');
                 const prevBg = container.style.background;
