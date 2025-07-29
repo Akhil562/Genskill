@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SkillFlip</title>
+
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+        .container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Modern, vibrant gradient background with subtle pattern overlay */
+            background:
+                linear-gradient(120deg, #11998e, #38ef7d, #43cea2, #185a9d),
+                url('https://www.transparenttextures.com/patterns/geometry2.png');
+            background-blend-mode: overlay;
+            background-size: 400% 400%, auto;
+            animation: gradientMove 18s ease-in-out infinite;
+        @keyframes gradientMove {
+            0% {
+                background-position: 0% 50%, 0 0;
+                background-image: linear-gradient(120deg, #11998e, #38ef7d, #43cea2, #185a9d), url('https://www.transparenttextures.com/patterns/geometry2.png');
+            }
+            20% {
+                background-position: 50% 100%, 0 0;
+                background-image: linear-gradient(120deg, #43cea2, #185a9d, #11998e, #38ef7d), url('https://www.transparenttextures.com/patterns/geometry2.png');
+            }
+            40% {
+                background-position: 100% 50%, 0 0;
+                background-image: linear-gradient(120deg, #38ef7d, #11998e, #185a9d, #43cea2), url('https://www.transparenttextures.com/patterns/geometry2.png');
+            }
+            60% {
+                background-position: 50% 0%, 0 0;
+                background-image: linear-gradient(120deg, #185a9d, #43cea2, #38ef7d, #11998e), url('https://www.transparenttextures.com/patterns/geometry2.png');
+            }
+            80% {
+                background-position: 0% 50%, 0 0;
+                background-image: linear-gradient(120deg, #43cea2, #11998e, #185a9d, #38ef7d), url('https://www.transparenttextures.com/patterns/geometry2.png');
+            }
+            100% {
+                background-position: 0% 50%, 0 0;
+                background-image: linear-gradient(120deg, #11998e, #38ef7d, #43cea2, #185a9d), url('https://www.transparenttextures.com/patterns/geometry2.png');
+            }
+        }
+            position: absolute;
+            flex-direction: column;
+            top: 0;
+            left: 0;
+            transition: background 1s;
+        }
+
+        .flip-card {
+            background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%);
+            width: 340px;
+            height: 230px;
+            border-radius: 22px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.18), 0 1.5px 8px 0 rgba(0,0,0,0.10);
+            border: none;
+            perspective: 1200px;
+            transition: box-shadow 0.3s;
+            position: relative;
+        }
+        .flip-card:hover {
+            box-shadow: 0 12px 36px 0 rgba(31, 38, 135, 0.22), 0 2px 12px 0 rgba(0,0,0,0.13);
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(.4,2,.6,1), box-shadow 0.3s;
+            transform-style: preserve-3d;
+            border-radius: 22px;
+        }
+        .flip-card.flipped .flip-card-inner {
+            transform: rotateY(180deg);
+        }
+        .flip-card-front, .flip-card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            text-align: center;
+            align-items: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            border-radius: 22px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            overflow: hidden;
+        }
+        .flip-card-front {
+            background: linear-gradient(120deg, #f6d365 0%, #fda085 100%);
+            color: #222;
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+        }
+        .flip-card-front img {
+            width: 90%;
+            height: 90%;
+            object-fit: contain;
+            border-radius: 16px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+            background: rgba(255,255,255,0.13);
+        }
+        .flip-card-back {
+            background: linear-gradient(120deg, #43e97b 0%, #38f9d7 100%);
+            color: #fff;
+            transform: rotateY(180deg);
+            border-radius: 22px;
+            padding: 18px 18px 10px 18px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        .flip-card-back h1 {
+            font-size: 2.1rem;
+            margin: 0 0 8px 0;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.10);
+        }
+        .flip-card-back p {
+            font-size: 1.1rem;
+            margin: 4px 0;
+            font-weight: 500;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+        #flipTime {
+            font-size: 1rem;
+            margin-top: 10px;
+            color: #e0f7fa;
+            font-weight: 600;
+        }
+
+.button{
+    background-color: steelblue; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    border-radius: 3px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;    
+}
+.button:hover {
+    background-color: darkblue;
+}
+.button:active{
+    background-color: navy;
+    transform: translateY(2px);
+}
+.resource-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 14px;
+    width: 100%;
+    max-width: 420px;
+    justify-items: center;
+}
+.resource-btn {
+    width: 180px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transition: transform 0.1s, box-shadow 0.2s;
+}
+.resource-btn:hover {
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 4px 16px rgba(0,0,0,0.13);
+    opacity: 0.95;
+}
+.resource-btn.google { background-color: #4285F4; color: #fff; }
+.resource-btn.yt { background-color: #ff0000; color: #fff; }
+.resource-btn.wiki { background-color: #222; color: #fff; }
+.resource-btn.quora { background-color: #b92b27; color: #fff; }
+
+
+        
+.row{
+    width:100%;
+    padding:0px 80px;
+}
+
+.navbar img{
+    margin-left: -15px;
+}
+
+
+.navbar {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0px 10px 28%;
+    background: rgba(255,255,255,0.10);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    position: relative;
+    z-index: 2;
+    margin: 0 auto;
+}
+.navbar img {
+    margin-left: -15px;
+    max-height: 48px;
+    width: auto;
+}
+.navbar ul {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    flex-wrap: wrap;
+}
+
+.navbar ul li{
+    list-style: none;
+    color:rgb(100, 99, 99);
+
+}
+
+.navbar ul li a{
+    padding: 10px 18px;
+    font-weight:bolder;
+    border-radius: 5px;
+    font-family: sans-serif;
+    font-size: 20px;
+    color:#89e0fe;
+    text-decoration: none;
+
+}
+       
+.navbar ul li a:hover{
+    background-color:rgb(7, 39, 64);
+}      
+        .flipit-title {
+            font-size: 56px;
+            font-family: 'Segoe UI', 'Montserrat', 'Poppins', Arial, sans-serif;
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, rgba(20,40,60,0.92) 0%, #185a9d 40%, #416056 70%, #111 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 6px 32px rgba(10,20,40,0.45), 0 2.5px 12px rgba(24,90,157,0.25);
+            margin: 0 0 18px 0;
+            padding: 0 0 8px 0;
+            text-align: center;
+            user-select: none;
+            transition: text-shadow 0.3s;
+        }
+        .flipit-title:hover {
+            text-shadow: 0 8px 32px rgba(24,90,157,0.28), 0 2.5px 12px rgba(67,206,162,0.18);
+            letter-spacing: 3px;
+        }
+        .skilltype-label {
+            display: block;
+            font-size: 26px;
+            font-family: 'Segoe UI', 'Montserrat', 'Poppins', Arial, sans-serif;
+            font-weight: 700;
+            color: #1a2a33;
+            letter-spacing: 1.2px;
+            margin-bottom: 10px;
+            margin-top: 8px;
+            text-align: center;
+            background: linear-gradient(90deg, #185a9d 0%, #4d7b6d 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 8px rgba(24,90,157,0.08);
+            border-radius: 4px;
+            padding: 0 8px;
+            user-select: none;
+        }
+        .skilltype-select {
+            font-size: 20px;
+            padding: 8px 18px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+            border: 2px solid #43cea2;
+            background: linear-gradient(90deg, #e0f7fa 0%, #f5fffa 100%);
+            color: #185a9d;
+            font-family: 'Segoe UI', 'Montserrat', 'Poppins', Arial, sans-serif;
+            font-weight: 600;
+            box-shadow: 0 2px 12px rgba(24,90,157,0.07);
+            outline: none;
+            transition: border 0.2s, box-shadow 0.2s;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            cursor: pointer;
+        }
+        .skilltype-select:focus, .skilltype-select:hover {
+            border: 2px solid #185a9d;
+            box-shadow: 0 4px 18px rgba(24,90,157,0.13);
+            background: linear-gradient(90deg, #e0f7fa 0%, #c8e6e6 100%);
+        }
+        .skilltype-select option {
+            color: #185a9d;
+            background: #f5fffa;
+            font-weight: 500;
+        }
+   
+    </style>
+</head>
+<body>
+<div class="cont">
+        <div class="row">
+            <div class="back">
+            <nav class = "navbar">
+                <img src = "" width = 20%>
+                <ul>
+                    <li><a href = "/">Home</a></li>
+                    <li><a href = "/SkillFlip">SkillFlip</a></li>
+                    <li><a href = "/Suggestions">Suggestions</a></li>
+                </ul>
+            </nav>
+            </div>
+
+    <div class = "container">
+        <h1 class="flipit-title">Flip It!!</h1>
+        
+        <div style="display: flex; flex-direction: row; justify-content: center; align-items: flex-start; gap: 40px; width: 100%;">
+            <div>
+                <div class="flip-card" id="flipCard">
+                    <div class="flip-card-inner">
+                        <div class="flip-card-front">
+                            <img src="../static/skills.png" alt="skills" style="width:100%;height:100%;align-items: center;">
+                        </div>
+                        <div class="flip-card-back" id="flipCardBack">
+                            <h1 id="flipTitle">John Doe</h1>
+                            <p id="flipDesc1">Architect & Engineer</p>
+                            <p id="flipDesc2">We love that guy</p>
+                            <p id="flipTime">Time to learn: 1 hour</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="cameraSection" style="display:flex; flex-direction:column; align-items:center; margin-top:16px;">
+                <video id="cameraStream" width="220" height="160" autoplay playsinline style="border-radius:8px; border:2px solid #89e0fe; background:#222;"></video>
+                <canvas id="photoCanvas" width="220" height="160" style="display:none;"></canvas>
+                <button class="button" id="captureBtn" style="margin:8px 0 8px 0;">Take Photo</button>
+                <button class="button" id="submitPhotoBtn" style="margin-bottom:8px;" disabled>Submit Photo</button>
+                <div style="margin-top:10px; font-size:18px;">Photos Submitted: <span id="photoCounter">0</span></div>
+            </div>
+        </div>
+        <div style="margin-top: 20px; display: flex; flex-direction: column; align-items: center;">
+        <label for="skillTypeSelect" class="skilltype-label">Choose skill type:</label>
+        
+            <select id="skillTypeSelect" class="skilltype-select">
+        
+                <option value="all">All</option>
+                <option value="basic">Basic</option>
+                <option value="fun">Fun</option>
+                <option value="daily">Daily</option>
+                <option value="outdoor">Outdoor</option>
+                <option value="crush">Impress Your Crush</option>
+            </select>
+            <button class="button" id="flipBtn">Flip Again</button>
+           <div id="resourceBtns" class="resource-grid">
+    <button class="button resource-btn google" id="googleBtn">Google</button>
+    <button class="button resource-btn yt" id="ytBtnGrid">YouTube</button>
+    <button class="button resource-btn wiki" id="wikiBtn">Wikipedia</button>
+    <button class="button resource-btn quora" id="quoraBtn">Quora</button>
+</div>
+        </div>
+    </div>
+    </div>
+
+
+    <script>
+        // Backgrounds to cycle through
+        const backgrounds = [
+            {
+                gradient: 'linear-gradient(135deg, #a8edea 0%, #fed6e3 100%)',
+                pattern: "url('https://www.transparenttextures.com/patterns/diamond-upholstery.png')"
+            },
+            {
+                gradient: 'linear-gradient(120deg, #f6d365 0%, #fda085 100%)',
+                pattern: "url('https://www.transparenttextures.com/patterns/hexellence.png')"
+            },
+            {
+                gradient: 'linear-gradient(120deg, #cfd9df 0%, #e2ebf0 100%)',
+                pattern: "url('https://www.transparenttextures.com/patterns/food.png')"
+            },
+            {
+                gradient: 'linear-gradient(120deg, #f093fb 0%, #f5576c 100%)',
+                pattern: "url('https://www.transparenttextures.com/patterns/graphy.png')"
+            },
+            {
+                gradient: 'linear-gradient(120deg, #43e97b 0%, #38f9d7 100%)',
+                pattern: "url('https://www.transparenttextures.com/patterns/geometry2.png')"
+            },
+            {
+                gradient: 'linear-gradient(120deg, #30cfd0 0%, #330867 100%)',
+                pattern: "url('https://www.transparenttextures.com/patterns/arches.png')"
+            }
+        ];
+        let flipCount = 0;
+        function setRandomBackground() {
+            const idx = Math.floor(Math.random() * backgrounds.length);
+            const bg = backgrounds[idx];
+            document.querySelector('.container').style.background = `${bg.gradient}, ${bg.pattern}`;
+            document.querySelector('.container').style.backgroundBlendMode = 'overlay';
+            document.querySelector('.container').style.backgroundSize = 'cover, auto';
+        }
+        const flipBtn = document.getElementById('flipBtn');
+        const flipCard = document.getElementById('flipCard');
+        const flipTitle = document.getElementById('flipTitle');
+        const flipDesc1 = document.getElementById('flipDesc1');
+        const flipDesc2 = document.getElementById('flipDesc2');
+
+        // Skill name pools by type
+        const skillPools = {
+            basic: [
+                'Reading', 'Drawing', 'Cycling', 'Swimming', 'Cooking', 'Typing', 'Listening', 'Walking', 'Cleaning', 'Counting',
+                'Writing', 'Painting', 'Gardening', 'Climbing', 'Balancing', 'Knitting', 'Sewing', 'Origami', 'Sketching', 'Folding'
+            ],
+            fun: [
+                'Singing', 'Dancing', 'Running', 'Jumping', 'Storytelling', 'Baking', 'Fishing', 'Hiking', 'Juggling', 'Meditating',
+                'Stretching', 'Smiling', 'Organizing', 'Packing', 'Unpacking', 'Skipping', 'Jogging', 'Whistling', 'Shopping'
+            ],
+            daily: [
+                'Cooking', 'Cleaning', 'Walking', 'Packing', 'Unpacking', 'Organizing', 'Shopping', 'Typing', 'Listening', 'Counting',
+                'Reading', 'Writing', 'Gardening', 'Folding', 'Drawing', 'Painting', 'Smiling'
+            ],
+            outdoor: [
+                'Cycling', 'Swimming', 'Hiking', 'Fishing', 'Running', 'Climbing', 'Jogging', 'Walking', 'Camping', 'Birdwatching',
+                'Gardening', 'Skating', 'Skipping', 'Balancing', 'Juggling', 'Nature Photography', 'Kite Flying', 'Orienteering', 'Rock Skipping', 'Trail Marking'
+            ],
+            crush: [
+                'Playing Guitar', 'Dancing Smoothly', 'Telling Jokes', 'Cooking a Romantic Dinner', 'Writing Poetry', 'Singing a Song',
+                'Drawing a Portrait', 'Magic Tricks', 'Complimenting Genuinely', 'Remembering Details', 'Listening Attentively',
+                'Making Origami Hearts', 'Playing a Sport', 'Giving a Pep Talk', 'Solving a Rubik’s Cube', 'Doing Card Tricks',
+                'Making a Playlist', 'Taking Good Photos', 'Planning a Surprise'
+            ]
+        };
+        // All skills combined (no duplicates)
+        const skillNames = Array.from(new Set([...skillPools.basic, ...skillPools.fun, ...skillPools.daily]));
+        const skillTypes = [
+            'Basic Skill', 'Fun Skill', 'Daily Skill', 'Simple Skill', 'Useful Skill', 'Life Skill', 'Easy Skill', 'Quick Skill'
+        ];
+        const skillFacts = [
+            'Improves knowledge.', 'Boosts creativity.', 'Good for health.', 'A life-saving skill.', 'Essential for daily life.',
+            'Useful for everyone.', 'Helps understand others.', 'Simple exercise.', 'Keeps things tidy.', 'Foundation for math.',
+            'Makes you happy.', 'Reduces stress.', 'Builds confidence.', 'Saves time.', 'Great for relaxation.', 'Fun to learn.',
+            'Can be done anywhere.', 'Great for kids.', 'Good for adults.', 'Easy to practice.'
+        ];
+
+        const flipTime = document.getElementById('flipTime');
+        const skillTypeSelect = document.getElementById('skillTypeSelect');
+        let currentSkillTitle = '';
+        function setRandomCardText() {
+            let selectedType = skillTypeSelect.value;
+            let pool;
+            if (selectedType === 'all') {
+                pool = skillNames;
+            } else {
+                pool = skillPools[selectedType] || skillNames;
+            }
+            // Ask user if they want to add a new skill (except for 'all')
+            if (selectedType !== 'all') {
+                if (Math.random() < 0.25) { // 25% chance to prompt
+                    const newSkill = prompt('Add a new skill for this category (leave blank to skip):');
+                    if (newSkill && newSkill.trim().length > 0) {
+                        skillPools[selectedType].push(newSkill.trim());
+                        if (!skillNames.includes(newSkill.trim())) {
+                            skillNames.push(newSkill.trim());
+                        }
+                        pool = skillPools[selectedType];
+                    }
+                }
+            }
+            const title = pool[Math.floor(Math.random() * pool.length)];
+            currentSkillTitle = title;
+            const desc1 = skillTypes[Math.floor(Math.random() * skillTypes.length)];
+            const desc2 = skillFacts[Math.floor(Math.random() * skillFacts.length)];
+            // Generate a random time to learn (less than 1 day)
+            const timeOptions = [
+                '10 minutes', '15 minutes', '20 minutes', '30 minutes', '45 minutes', '1 hour', '1.5 hours', '2 hours', '3 hours', '4 hours', '5 hours', '6 hours', '8 hours', '12 hours' 
+            ];
+            const time = timeOptions[Math.floor(Math.random() * timeOptions.length)];
+            flipTitle.textContent = title;
+            flipDesc1.textContent = desc1;
+            flipDesc2.textContent = desc2;
+            flipTime.textContent = 'Time to learn: ' + time;
+
+            // Change background color of the card back depending on skill type
+            const cardBack = document.getElementById('flipCardBack');
+            let cardColor = 'dodgerblue';
+            let screenColor = null;
+            switch(selectedType) {
+                case 'basic': cardColor = '#4caf50'; screenColor = '#e8f5e9'; break; // green
+                case 'fun': cardColor = '#ff9800'; screenColor = '#fff3e0'; break; // orange
+                case 'daily': cardColor = '#2196f3'; screenColor = '#e3f2fd'; break; // blue
+                case 'outdoor': cardColor = '#8bc34a'; screenColor = '#f1f8e9'; break; // light green
+                case 'crush': cardColor = '#e91e63'; screenColor = '#fce4ec'; break; // pink
+                default: cardColor = 'dodgerblue'; screenColor = null; break;
+            }
+            cardBack.style.backgroundColor = cardColor;
+
+            // Temporarily change the screen background color for 5 seconds
+            if (screenColor) {
+                const container = document.querySelector('.container');
+                const prevBg = container.style.background;
+                container.style.transition = 'background 0.5s';
+                container.style.background = screenColor;
+                setTimeout(() => {
+                    container.style.background = prevBg;
+                }, 5000);
+            }
+        }
+
+
+
+        const googleBtn = document.getElementById('googleBtn');
+        const ytBtnGrid = document.getElementById('ytBtnGrid');
+        const wikiBtn = document.getElementById('wikiBtn');
+        const quoraBtn = document.getElementById('quoraBtn');
+
+        // Disable resource buttons initially
+        [googleBtn, ytBtnGrid, wikiBtn, quoraBtn].forEach(btn => btn.disabled = true);
+
+
+        function enableResourceButtons() {
+            [googleBtn, ytBtnGrid, wikiBtn, quoraBtn].forEach(btn => btn.disabled = false);
+        }
+        function disableResourceButtons() {
+            [googleBtn, ytBtnGrid, wikiBtn, quoraBtn].forEach(btn => btn.disabled = true);
+        }
+
+        googleBtn.addEventListener('click', function() {
+            if (!googleBtn.disabled && currentSkillTitle) {
+                const query = encodeURIComponent(currentSkillTitle + ' skill');
+                window.open('https://www.google.com/search?q=' + query, '_blank');
+            }
+        });
+        ytBtnGrid.addEventListener('click', function() {
+            if (!ytBtnGrid.disabled && currentSkillTitle) {
+                const query = encodeURIComponent(currentSkillTitle + ' skill tutorial');
+                window.open('https://www.youtube.com/results?search_query=' + query, '_blank');
+            }
+        });
+        wikiBtn.addEventListener('click', function() {
+            if (!wikiBtn.disabled && currentSkillTitle) {
+                const query = encodeURIComponent(currentSkillTitle);
+                window.open('https://en.wikipedia.org/wiki/Special:Search?search=' + query, '_blank');
+            }
+        });
+        quoraBtn.addEventListener('click', function() {
+            if (!quoraBtn.disabled && currentSkillTitle) {
+                const query = encodeURIComponent(currentSkillTitle + ' skill');
+                window.open('https://www.quora.com/search?q=' + query, '_blank');
+            }
+        });
+
+        // Enable resource buttons after first flip
+        function afterFirstFlip() {
+            enableResourceButtons();
+        }
+
+        // Camera/photo/counter logic
+        const cameraSection = document.getElementById('cameraSection');
+        const cameraStream = document.getElementById('cameraStream');
+        const photoCanvas = document.getElementById('photoCanvas');
+        const captureBtn = document.getElementById('captureBtn');
+        const submitPhotoBtn = document.getElementById('submitPhotoBtn');
+        const photoCounter = document.getElementById('photoCounter');
+        let stream = null;
+        let photoTaken = false;
+        let photoSubmitted = false;
+        let photoCount = 0;
+        let firstFlip = true;
+
+        // Load photo count from localStorage
+        if (localStorage.getItem('photoCount')) {
+            photoCount = parseInt(localStorage.getItem('photoCount'), 10) || 0;
+            photoCounter.textContent = photoCount;
+        }
+
+        async function startCamera() {
+            if (stream) return;
+            try {
+                stream = await navigator.mediaDevices.getUserMedia({ video: true });
+                cameraStream.srcObject = stream;
+            } catch (err) {
+                alert('Could not access camera. Please allow camera access.');
+                captureBtn.disabled = true;
+                submitPhotoBtn.disabled = true;
+            }
+        }
+        function stopCamera() {
+            if (stream) {
+                let tracks = stream.getTracks();
+                tracks.forEach(track => track.stop());
+                stream = null;
+                cameraStream.srcObject = null;
+            }
+        }
+
+        function resetPhotoSubmission() {
+            photoTaken = false;
+            photoSubmitted = false;
+            submitPhotoBtn.disabled = true;
+            captureBtn.disabled = false;
+            submitPhotoBtn.textContent = 'Submit Photo';
+            photoCanvas.style.display = 'none';
+            cameraStream.style.display = 'block';
+        }
+
+        captureBtn.addEventListener('click', function() {
+            photoCanvas.getContext('2d').drawImage(cameraStream, 0, 0, photoCanvas.width, photoCanvas.height);
+            photoCanvas.style.display = 'block';
+            cameraStream.style.display = 'none';
+            photoTaken = true;
+            submitPhotoBtn.disabled = false;
+            captureBtn.disabled = true;
+        });
+
+        submitPhotoBtn.addEventListener('click', function() {
+            if (!photoTaken) {
+                alert('Please take a photo first.');
+                return;
+            }
+            photoSubmitted = true;
+            submitPhotoBtn.textContent = 'Photo Submitted!';
+            submitPhotoBtn.disabled = true;
+            photoCount++;
+            photoCounter.textContent = photoCount;
+            localStorage.setItem('photoCount', photoCount);
+        });
+
+        // Start camera on load
+        startCamera();
+        resetPhotoSubmission();
+
+        flipBtn.addEventListener('click', function() {
+            const isFlippingToBack = !flipCard.classList.contains('flipped');
+            if (isFlippingToBack) {
+                setRandomCardText();
+                flipCount++;
+                if (flipCount === 1) {
+                    afterFirstFlip();
+                }
+                if (flipCount % 5 === 0) {
+                    setRandomBackground();
+                }
+                enableResourceButtons();
+                flipCard.classList.toggle('flipped');
+                firstFlip = false;
+            } else {
+                // Flipping to front, require photo submission after first flip
+                if (!photoSubmitted && !firstFlip) {
+                    alert('Please submit a photo before flipping back!');
+                    return;
+                }
+                flipCard.classList.toggle('flipped');
+                resetPhotoSubmission();
+            }
+        });
+    </script>
+    
+</body>
+</html>
